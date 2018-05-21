@@ -4,7 +4,7 @@
   "description": "A Node Based Webhook that fetches the details of a movie",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "start": "node index.js"
   },
   "keywords": [
     "movieDb",
