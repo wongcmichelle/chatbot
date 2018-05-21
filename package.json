@@ -1,0 +1,20 @@
+{
+  "name": "movie_db_webhook",
+  "version": "1.0.0",
+  "description": "A Node Based Webhook that fetches the details of a movie",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [
+    "movieDb",
+    "webhook",
+    "nodejs"
+  ],
+  "author": "Michelle Wong",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3"
+  }
+}
