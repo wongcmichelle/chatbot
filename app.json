@@ -1,0 +1,13 @@
+{
+    "name": "food-recipe-db-webhook",
+    "description": "An API that exposes food recipes in the form of a response that is accepted by Dialogflow",
+    "repository": "https://github.com/wongcmichelle/chatbot.git",
+    "keywords": [
+        "news",
+        "api",
+        "Dialogflow",
+        "facebook",
+        "Facebook",
+        "Messenger"
+    ]
+}

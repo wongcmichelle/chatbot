@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const http = require('http');
+var unirest = require('unirest');
 const API_KEY = require('./apiKey');
 
 const server = express();
@@ -10,34 +10,38 @@ server.use(bodyParser.urlencoded({
 
 server.use(bodyParser.json());
 
-
-server.post('/get-movie-details', (req, res) => {
-
-    const movieToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.movie ? req.body.result.parameters.movie : 'The Godfather';
-    const reqUrl = encodeURI('http://www.omdbapi.com/?t=${movieToSearch}&apikey=${API_KEY}');
-    http.get(reqUrl, (responseFromAPI) => {
-        let completeResponse = '';
-        responseFromAPI.on('data', (chunk) => {
-            completeResponse += chunk;
-        });
-        responseFromAPI.on('end', () => {
-            const movie = JSON.parse(completeResponse);
-            let dataToSend = movieToSearch === 'The Godfather' ? `I don't have the required info on that. Here's some info on 'The Godfather' instead.\n` : '';
-            dataToSend += `${movie.Title} is a ${movie.Actors} starer ${movie.Genre} movie, released in ${movie.Year}. It was directed by ${movie.Director}`;
-
-            return res.json({
-                speech: dataToSend,
-                displayText: dataToSend,
-                source: 'get-movie-details'
+server.post('/get-food-recipes', function (request,response)  {
+    if (request.body.result && request.body.result.parameters && request.body.result.parameters['ingredients']) {
+            const ingredients = request.body.result.parameters['ingredients'];
+            const reqUrl = encodeURI("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=5&ranking=1&ignorePantry=false&ingredients=${ingredients}%2Cflour%2Csugar")
+            var req = unirest("GET", reqUrl);
+            req.headers({
+                "X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+                "X-RapidAPI-Key": API_KEY
             });
-        });
-    }, (error) => {
-        return res.json({
-            speech: 'Something went wrong!',
-            displayText: 'Something went wrong!',
-            source: 'get-movie-details'
-        });
-    });
+            req.send("{}");
+            req.end(function (res) {
+                if (res.error) {
+                    response.setHeader('Content-Type', 'application/json');
+                    response.send(JSON.stringify({
+                        "speech" : "Error. Can you try it again ? ",
+                        "displayText" : "Error. Can you try it again ? "
+                    }));
+                } else if (res.body.results.length > 0) {
+                    let result = res.body.results;
+                    let output = '';
+                    for(let i = 0; i<result.length;i++) {
+                        output += result[i].title;
+                        output+="\n"
+                    }
+                    response.setHeader('Content-Type', 'application/json');
+                    response.send(JSON.stringify({
+                        "speech" : output,
+                        "displayText" : output
+                    })); 
+                }
+            });
+    }
 });
 
 server.listen((process.env.PORT || 8000), () => {

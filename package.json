@@ -1,13 +1,13 @@
 {
-  "name": "movie_db_webhook",
+  "name": "food_recipe_db_webhook",
   "version": "1.0.0",
-  "description": "A Node Based Webhook that fetches the details of a movie",
+  "description": "A Node Based Webhook that fetches recipes based on given ingredients",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "keywords": [
-    "movieDb",
+    "foodRecipeDb",
     "webhook",
     "nodejs"
   ],
@@ -16,5 +16,10 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2"
   }
 }
