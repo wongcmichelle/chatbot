@@ -15,7 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "unirest": "^0.6.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
