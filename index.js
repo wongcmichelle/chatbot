@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-var unirest = require('unirest');
+const unirest = require('unirest');
 const API_KEY = require('./apiKey');
 
 const server = express();
@@ -13,7 +13,7 @@ server.use(bodyParser.json());
 server.post('/get-food-recipes', function (request,response)  {
     if (request.body.result && request.body.result.parameters && request.body.result.parameters['ingredients']) {
             const ingredients = request.body.result.parameters['ingredients'];
-            const reqUrl = encodeURI("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=5&ranking=1&ignorePantry=false&ingredients=${ingredients}%2Cflour%2Csugar")
+            const reqUrl = encodeURI(`https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=5&ranking=1&ignorePantry=false&ingredients=${ingredients}`)
             var req = unirest("GET", reqUrl);
             req.headers({
                 "X-RapidAPI-Host": "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
@@ -31,7 +31,9 @@ server.post('/get-food-recipes', function (request,response)  {
                     let result = res.body.results;
                     let output = '';
                     for(let i = 0; i<result.length;i++) {
-                        output += result[i].title;
+                        const hyphenTitle = result[i].title.toLowerCase().split(' ').join('-');
+                        const id = result[i].id;
+                        output += `https://spoonacular.com/recipes/${hyphenTitle}-${id}`;
                         output+="\n"
                     }
                     response.setHeader('Content-Type', 'application/json');
